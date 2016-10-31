@@ -27,9 +27,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import betullam.goobi.oaihelper.classes.Id;
-import betullam.goobi.oaihelper.main.GoobiOaiHelper;
-import betullam.goobi.oaihelper.network.Network;
+import ak.goobi.oaihelper.classes.Id;
+import ak.goobi.oaihelper.main.GoobiOaiHelper;
+import ak.goobi.oaihelper.network.Network;
 import betullam.xmlhelper.XmlParser;
 
 

@@ -2,7 +2,7 @@ package ak.goobi.genios;
 
 import java.util.List;
 
-import betullam.goobi.oaihelper.classes.Id;
+import ak.goobi.oaihelper.classes.Id;
 
 public class StructureElement {
 
