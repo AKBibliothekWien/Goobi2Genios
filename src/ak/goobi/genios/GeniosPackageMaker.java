@@ -1,4 +1,4 @@
-package betullam.goobi.genios;
+package ak.goobi.genios;
 
 import java.io.File;
 import java.io.FileInputStream;

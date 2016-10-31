@@ -1,4 +1,4 @@
-package betullam.goobi.genios;
+package ak.goobi.genios;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
-import betullam.goobi.akconfig.AkConfig;
+import main.java.ak.goobi.akconfig.AkConfig;
 
 public class Main {
 

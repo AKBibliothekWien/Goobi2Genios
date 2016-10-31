@@ -1,4 +1,4 @@
-package betullam.goobi.genios;
+package ak.goobi.genios;
 
 import java.util.Date;
 import java.util.Properties;
