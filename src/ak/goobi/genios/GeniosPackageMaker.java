@@ -30,7 +30,8 @@ import org.xml.sax.SAXException;
 import ak.goobi.oaihelper.classes.Id;
 import ak.goobi.oaihelper.main.GoobiOaiHelper;
 import ak.goobi.oaihelper.network.Network;
-import betullam.xmlhelper.XmlParser;
+import ak.goobi.pdfmaker.PdfByOrderNos;
+import ak.xmlhelper.XmlParser;
 
 
 
@@ -189,7 +190,7 @@ public class GeniosPackageMaker {
 					mdFileWriter.write(System.getProperty("line.separator")); // New line
 				}
 
-				new betullam.goobi.pdfmaker.PdfByOrderNos(this.pathToPdfFolder, imageNos, pathCreatedFiles, pdfSingleArticleFilename);
+				new PdfByOrderNos(this.pathToPdfFolder, imageNos, pathCreatedFiles, pdfSingleArticleFilename);
 
 			}
 			mdFileWriter.flush();
