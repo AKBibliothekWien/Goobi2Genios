@@ -24,11 +24,11 @@ public class Main {
 	static String pubDate;
 	static String publication;
 
+	
 	public static void main(String[] args) throws Exception {
 		
 		// Get AK configs in goobi config folder:
 		akConfig = new AkConfig().getAkConfig();
-
 
 		if (args.length < 4) {
 			System.err.println("\nError: You have to supply 4 arguments:\n\n" +
@@ -48,7 +48,6 @@ public class Main {
 			//System.out.println("pathToDestination: " + pathToDestination);
 			//System.out.println("processTitle: " + processTitle);
 			//System.out.println("processid: " + processid);
-
 
 			exportToGenios = exportToGenios(processid);
 			
@@ -85,10 +84,9 @@ public class Main {
 				System.out.println("Genios-Daten wurden nicht exportiert.");
 			}
 		}
-
-
 	}
 
+	
 	private static boolean exportToGenios(String processid) {
 		// Check if data should be exported to genios.
 		// We use a "Prozesseigenschaft" of the proccess for it.
@@ -106,7 +104,6 @@ public class Main {
 		Connection jdbcConnection = null;
 		
 		try {
-
 			String jdbc = Main.akConfig.get("General.Jdbc");
 			String dbUser = Main.akConfig.get("General.DbUser");
 			String dbPass = Main.akConfig.get("General.DbPass");
@@ -116,12 +113,9 @@ public class Main {
 			Statement statement = jdbcConnection.createStatement();
 			//String sql = "SELECT Titel, WERT FROM prozesseeigenschaften WHERE prozesseID=" + processid + " AND (Titel=\"Genios\" OR Titel=\"Genios Kürzel\" OR Titel=\"Genios FTP-Ordner\" OR Titel=\"Genios Veröff.-Datum\")";
 			String sql = "SELECT Titel, WERT FROM prozesseeigenschaften WHERE prozesseID=" + processid + " AND (Titel=\"Genios\" OR Titel=\"Genios Publikation\" OR Titel=\"Genios Veröff.-Datum\")";
-
 			
 			ResultSet resultSet = statement.executeQuery(sql);
 
-			
-			
 			while(resultSet.next()){
 				//Retrieve by column name
 				String title = resultSet.getString("Titel");
@@ -141,6 +135,7 @@ public class Main {
 					ftpDirectory = value;
 				}
 				*/
+				
 				if (title.equals("Genios Veröff.-Datum")) {
 					pubDate = value;
 				}
@@ -184,4 +179,5 @@ public class Main {
 		return exportToGenios;
 	}
 
+	
 }
