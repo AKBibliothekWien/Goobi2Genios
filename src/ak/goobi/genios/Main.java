@@ -108,7 +108,8 @@ public class Main {
 			String dbUser = Main.akConfig.get("General.DbUser");
 			String dbPass = Main.akConfig.get("General.DbPass");
 
-			jdbcConnection = DriverManager.getConnection("jdbc:"+jdbc, dbUser, dbPass);
+			// Disable SSL warning by adding "useSSL=false" as a parameter to the connection string
+			jdbcConnection = DriverManager.getConnection("jdbc:"+jdbc+"?useSSL=false", dbUser, dbPass);
 			
 			Statement statement = jdbcConnection.createStatement();
 			//String sql = "SELECT Titel, WERT FROM prozesseeigenschaften WHERE prozesseID=" + processid + " AND (Titel=\"Genios\" OR Titel=\"Genios Kürzel\" OR Titel=\"Genios FTP-Ordner\" OR Titel=\"Genios Veröff.-Datum\")";
