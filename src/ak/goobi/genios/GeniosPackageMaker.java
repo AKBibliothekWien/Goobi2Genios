@@ -67,7 +67,7 @@ public class GeniosPackageMaker {
 		}
 
 
-		this.goh = new GoobiOaiHelper("http://emedien.arbeiterkammer.at/viewer/oai/");
+		this.goh = new GoobiOaiHelper("https://emedien.arbeiterkammer.at/viewer/oai/");
 		this.xmlParser = new XmlParser();
 		//this.pathToProcessFolder = processFolder + File.separator; // Must be before getIdentifier()!!!
 		this.pathToProcessFolder = stripFileSeperatorFromPath(processFolder); // Must be before getIdentifier()!!!
