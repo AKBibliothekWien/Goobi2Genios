@@ -52,10 +52,7 @@ public class GeniosPackageMaker {
 	private String ftpDirectory;
 	private String pubDate;
 	private String zipFileName; // Use this in the info-eMail sent to Genios (see Main.java)
-
-
-
-
+	private List<String> structTypesToParse;
 	List<StructureElement> structureElements = new ArrayList<StructureElement>();;
 
 	public GeniosPackageMaker(String processFolder, String pathToDestination, String processTitle, String structureTypes, String prefix, String ftpDirectory, String pubDate) throws Exception {
@@ -75,6 +72,7 @@ public class GeniosPackageMaker {
 		this.identifier = getIdentifier();
 		this.document = new Network().getMetsXmlRecord(goh.getOaiPmh(), this.identifier);
 		this.pubDate = pubDate; // Must be before getStructureElements()!!!
+		this.structTypesToParse = typesToParse;
 		this.structureElements = getStructureElements(typesToParse);
 		this.pathToPdfFolder = this.pathToProcessFolder + File.separator + "ocr" + File.separator + this.processTitle + "_pdf" + File.separator;
 		this.pathToSourceFolder = this.getViewerSourceFolder(pathToProcessFolder);
@@ -88,6 +86,11 @@ public class GeniosPackageMaker {
 
 		boolean packageCreated = false;
 
+		if (this.structureElements == null || this.structureElements.isEmpty()) {
+			System.err.println("Keiner der folgenden Strukturelemente wurde für dieses Dokument in der OAI-PMH Schnittstelle des Viewers gefunden:" + this.structTypesToParse + ".\nBitte prüfen ob mindestens eines dieser Sturkturelemente in diesem Vorgang angelegt ist und dann in den Viewer exportieren, damit es auch in der OAI-PMH Schnittstelle zur Verfügung steht.");
+			return packageCreated;
+		}
+		
 		try {
 			// Get date issued:						
 			Date dtPubDate = null;
@@ -95,8 +98,7 @@ public class GeniosPackageMaker {
 				dtPubDate = new SimpleDateFormat("dd.MM.yyyy").parse(this.pubDate);
 			} catch (ParseException e) {
 				// If there is no date to parse, print error-message and stop executing!
-				System.err.print("Publication date (Erscheinungsdatum-/jahr) is not parseable: " + this.pubDate + "\nFor Genios, you have to use format dd.mm.yyyy!\n");
-				packageCreated = false;
+				System.err.print("Erscheinungsdatum \"" + this.pubDate + "\" des Vorgangs kann nicht gelesen werden.\nEs muss in den Vorgangseigenschaften vorhanden sein und folgendes Format aufweisen: dd.mm.yyyy\n");
 				return packageCreated;
 			}
 			String strPubDate = new SimpleDateFormat("yyyyMMdd").format(dtPubDate);
@@ -116,8 +118,6 @@ public class GeniosPackageMaker {
 			
 			FileOutputStream fileStream = new FileOutputStream(new File(this.pathCreatedFiles+tempMdFile));
 			OutputStreamWriter mdFileWriter = new OutputStreamWriter(fileStream, "UTF-8");
-			 
-			
 
 			// Write headings and separate them with TAB:
 			mdFileWriter.write("Seite");
@@ -130,7 +130,7 @@ public class GeniosPackageMaker {
 			mdFileWriter.write("\t");
 			mdFileWriter.write("pdf");
 			mdFileWriter.write(System.getProperty("line.separator"));
-
+			
 			for (StructureElement structureElement : structureElements) {
 				String title = structureElement.getTitle();
 				String abstr = structureElement.getArtAbstract();
@@ -146,7 +146,6 @@ public class GeniosPackageMaker {
 				String authors = (lstAuthors != null) ? StringUtils.join(lstAuthors, ";").trim() : "";
 				List<String> imageNos = goh.getOrderNoByPhysId(document, structureElement.getId().getPhysIds());
 
-				
 				// Treat issue name for filenames:
 				issue = issue.replaceAll(" ", "_"); // Replace whitespaces chars with "_" (underscore)
 				issue = issue.replaceAll("[^A-Za-z0-9_]", ""); // Replace everything that is not alphanumeric or "_" with "" (nothing)
@@ -158,7 +157,7 @@ public class GeniosPackageMaker {
 				mdAndZipFile.add(issue);
 				mdFileName = this.prefix + StringUtils.join(mdAndZipFile, "_") + ".txt";
 				this.zipFileName = this.prefix + StringUtils.join(mdAndZipFile, "_") + ".zip";
-						
+				
 				// PDF single article filename:
 				List<String> pdfSingleFile = new ArrayList<String>();
 				if (!year.isEmpty()) {pdfSingleFile.add(year);}
@@ -175,7 +174,6 @@ public class GeniosPackageMaker {
 				pdfWholeFile.add(issue);
 				wholePdfName = this.prefix + StringUtils.join(pdfWholeFile, "_") + ".pdf";
 
-				
 				// Write one line per article (seperate data with TAB):
 				if (title != null) {
 					mdFileWriter.write(pages);
@@ -253,7 +251,7 @@ public class GeniosPackageMaker {
 			}
 
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getStackTrace());
+			e.printStackTrace();
 			packageCreated = false;
 		}
 
@@ -273,10 +271,10 @@ public class GeniosPackageMaker {
 	 * @throws Exception
 	 */
 	public List<StructureElement> getStructureElements(List<String> structureElements) throws Exception {
-
+		
 		List<StructureElement> lstStructureElements = new ArrayList<StructureElement>();
 		List<Id> ids = goh.getIds(document, structureElements);
-
+		
 		for(Id metsIds : ids) {
 
 			String logId = metsIds.getLogId();
