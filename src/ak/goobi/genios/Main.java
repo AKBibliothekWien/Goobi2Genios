@@ -15,7 +15,6 @@ public class Main {
 	static String processFolder;
 	static String pathToDestination;
 	static String processTitle;
-	static String identifier;
 	static String structureElements;
 	static String prefix;
 	static String processid;
@@ -55,7 +54,7 @@ public class Main {
 				structureElements = (akConfig.get("Genios."+publication+".StructureElements") != null) ? akConfig.get("Genios."+publication+".StructureElements") : null;
 				prefix = (akConfig.get("Genios."+publication+".Prefix") != null) ? akConfig.get("Genios."+publication+".Prefix") : prefix;
 				ftpDirectory = (akConfig.get("Genios."+publication+".FtpPath") != null) ? akConfig.get("Genios."+publication+".FtpPath") : ftpDirectory;
-
+				
 				if (structureElements != null && prefix != null && ftpDirectory != null) {
 					GeniosPackageMaker gpm = new GeniosPackageMaker(processFolder, pathToDestination, processTitle, structureElements, prefix, ftpDirectory, pubDate);
 					boolean geniosPackageCreated = gpm.makeGeniosPackage();
@@ -78,8 +77,6 @@ public class Main {
 				} else {
 					System.err.println("Fehler beim Erstellen der Genios-Daten!\nPrüfen Sie, ob in der Datei [GOOBI]/config/goobi_ak.xml die Werte im Abschnitt <Genios><"+publication+"> ... </"+publication+"></Genios> korrekt gesetzt sind!");
 				}
-				
-				
 			} else {
 				System.out.println("Genios-Daten wurden nicht exportiert.");
 			}
